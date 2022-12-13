@@ -107,7 +107,7 @@ namespace RestApi.Controllers
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(recipes.MetaData));
 
-            var recipesDto = _mapper.Map<RecipeDto>(recipes);
+            var recipesDto = _mapper.Map<ICollection<RecipeDto>>(recipes).ToList();
             return Ok(recipesDto);
         }
 
