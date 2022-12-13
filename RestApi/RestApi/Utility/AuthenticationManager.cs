@@ -106,9 +106,11 @@ namespace RestApi.Utility
 
         public async Task<bool> IsEmailConfirmed(string email)
         {
-            var entityUser = await _userManager.FindByEmailAsync(email);
+            // var entityUser = await _userManager.FindByEmailAsync(email);
+            var user = await _repositoryManager.User.GetUserAsyncByEmail(email, false);
 
-            return await _userManager.IsEmailConfirmedAsync(entityUser);
+
+            return await _userManager.IsEmailConfirmedAsync(user);
         }
     }
 }
