@@ -20,7 +20,7 @@ namespace Repository
             .OrderBy(u => u.Email)
             .ToListAsync();
 
-        public async Task<User> GetUserAsync(string userId, bool trackChanges) => 
+        public async Task<User> GetUserAsync(string userId, bool trackChanges) =>
             await FindByCondition(u => u.Id.Equals(userId), trackChanges)
             .SingleOrDefaultAsync();
 
@@ -29,5 +29,9 @@ namespace Repository
             .ToListAsync();
 
         public void DeleteUser(User user) => Delete(user);
+
+        public async Task<User> GetUserAsyncByEmail(string email, bool trackChanges) =>
+           await FindByCondition(u => u.Email.Equals(email), trackChanges)
+           .SingleOrDefaultAsync();
     }
 }

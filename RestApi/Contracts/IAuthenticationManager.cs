@@ -11,5 +11,7 @@ namespace Contracts
         Task<string> GetUserId(string email);
         string GetUserEmail(string token);
         int? GetExpirationDate(string token);
+
+
     }
 }

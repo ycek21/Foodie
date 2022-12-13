@@ -10,5 +10,6 @@ namespace Contracts
         Task<User> GetUserAsync(string userId, bool trackChanges);
         Task<IEnumerable<User>> GetUsersByIdsAsync(IEnumerable<string> ids, bool trackChanges);
         void DeleteUser(User user);
+        Task<User> GetUserAsyncByEmail(string email, bool trackChanges);
     }
 }

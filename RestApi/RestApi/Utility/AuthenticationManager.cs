@@ -16,19 +16,23 @@ namespace RestApi.Utility
     public class AuthenticationManager : IAuthenticationManager
     {
         private readonly UserManager<User> _userManager;
+        private readonly IRepositoryManager _repositoryManager;
         private readonly IConfiguration _configuration;
 
         private User _user;
 
-        public AuthenticationManager(UserManager<User> userManager, IConfiguration configuration)
+        public AuthenticationManager(UserManager<User> userManager, IConfiguration configuration, IRepositoryManager repositoryManager)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task<bool> ValidateUser(UserForAuthenticationDto userForAuth)
         {
-            _user = await _userManager.FindByEmailAsync(userForAuth.Email);
+            // _user = await _userManager.FindByEmailAsync(userForAuth.Email);
+            _user = await _repositoryManager.User.GetUserAsyncByEmail(userForAuth.Email, false);
+
 
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
@@ -44,7 +48,9 @@ namespace RestApi.Utility
 
         public async Task<string> GetUserId(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            // var user = await _userManager.FindByEmailAsync(email);
+            var user = await _repositoryManager.User.GetUserAsyncByEmail(email, false);
+
             return user.Id;
         }
 
