@@ -107,7 +107,7 @@ namespace RestApi.Controllers
 
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(recipes.MetaData));
 
-            var recipesDto = ConvertRecipesToRecipesWithLikedRecipeIdDto(recipes, userId);
+            var recipesDto = _mapper.Map<RecipeDto>(recipes);
             return Ok(recipesDto);
         }
 
@@ -139,7 +139,7 @@ namespace RestApi.Controllers
         }
 
         [HttpGet("collection/({ids})", Name = "RecipeCollection"), Authorize]
-        public async Task<IActionResult> GetRecipeCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]IEnumerable<Guid> ids)
+        public async Task<IActionResult> GetRecipeCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
             if (ids == null)
             {
@@ -178,7 +178,7 @@ namespace RestApi.Controllers
 
         [HttpPut, DisableRequestSizeLimit, Authorize]
         public async Task<IActionResult> UpdateRecipe(
-            [FromForm]Guid id, [ModelBinder(typeof(JsonWithFilesFormDataModelBinder), Name = "recipe")][FromForm] RecipeForCreationDto recipe,
+            [FromForm] Guid id, [ModelBinder(typeof(JsonWithFilesFormDataModelBinder), Name = "recipe")][FromForm] RecipeForCreationDto recipe,
             [FromForm] IFormFile file)
         {
             if (recipe == null)
@@ -207,7 +207,7 @@ namespace RestApi.Controllers
             _mapper.Map(recipe, recipeEntity);
 
             recipeEntity.PhotoPath = photoPath;
-            
+
             await _repository.SaveAsync();
 
             return NoContent();
@@ -241,7 +241,7 @@ namespace RestApi.Controllers
             {
                 return NotFound();
             }
-            else if(recipe.PhotoPath == null)
+            else if (recipe.PhotoPath == null)
             {
                 return NotFound();
             }
@@ -250,7 +250,7 @@ namespace RestApi.Controllers
 
             var recipePhoto = await _photoService.GetPhoto(recipePhotoPath);
 
-            if(recipePhoto == null)
+            if (recipePhoto == null)
             {
                 return NotFound();
             }
@@ -279,7 +279,7 @@ namespace RestApi.Controllers
         private RecipeWithLikedRecipeIdDto ConvertRecipeToRecipeWithLikedRecipeIdDto(Recipe recipe, string userId)
         {
             var recipeDto = _mapper.Map<RecipeWithLikedRecipeIdDto>(recipe);
-            
+
             var likedRecipes = recipe.LikedRecipes.ToList();
             for (int j = 0; j < likedRecipes.Count; j++)
             {
