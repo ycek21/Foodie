@@ -133,7 +133,8 @@ namespace RestApi.Controllers
             }
             else
             {
-                var recipeDto = ConvertRecipeToRecipeWithLikedRecipeIdDto(recipe, userId);
+                // var recipeDto = ConvertRecipeToRecipeWithLikedRecipeIdDto(recipe, userId);
+                var recipeDto = _mapper.Map<RecipeDto>(recipe);
                 return Ok(recipeDto);
             }
         }
